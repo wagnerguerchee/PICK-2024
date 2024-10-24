@@ -1,8 +1,5 @@
-# PICK-2024
-programa internsivo de containers e kubernets 
-
 clonar aplicação 
-#git clone https://github.com/badtuxx/giropops-senhas.git
+git clone https://github.com/badtuxx/giropops-senhas.git
 
 entrar no diretorio 
 cd giropops-senhas/
@@ -121,5 +118,4 @@ cosign generate-key-pair
 cosign sign -key cosign.key giropops-senhas:1.0
 #coloca a senha gerada na etapa anterior 
 #porem a imagem tem que estar em um registry
-
 

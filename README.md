@@ -14,7 +14,7 @@ cd giropops-senhas/
 Criar Dockerfile 
 vim Dockerfile
 ---------------------------------
-FROM python:3.11
+```FROM python:3.11
 WORKDIR /app
 COPY requirements.txt .
 COPY app.py .
@@ -24,7 +24,7 @@ COPY static static/
 RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["flask", "run", "--host=0.0.0.0"]```
 -------------------------------------------------------
 
 rodar aplicação e setar ip local para rodar REDIS junto 
@@ -53,7 +53,7 @@ docker build -t giropops-senha:4.0 .
 
 imagem distroless
 
-FROM cgr.dev/chainguard/python:latest-dev
+```FROM cgr.dev/chainguard/python:latest-dev
 WORKDIR /app
 COPY requirements.txt .
 # Instalação sem --user
@@ -63,12 +63,12 @@ COPY templates templates/
 COPY static static/
 EXPOSE 5000
 # Usando python -m flask
-ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0", "--debug"]
+ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0", "--debug"]```
 ---------------------------------------------------------------
 
 multistage
 # Primeira etapa (build)
-FROM cgr.dev/chainguard/python:latest-dev as dev
+```FROM cgr.dev/chainguard/python:latest-dev as dev
 WORKDIR /app
 # Criando um ambiente virtual no Python
 RUN python -m venv venv
@@ -91,7 +91,7 @@ ENV PATH="/app/venv/bin:$PATH"
 # Expondo a porta da aplicação Flask
 EXPOSE 5000
 # Definindo o comando de inicialização da aplicação Flask
-ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0", "--debug"]
+ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0", "--debug"]```
 
 docker build -t giropops-senha:5.0 .
 

@@ -1,6 +1,10 @@
 # PICK-2024
 programa internsivo de containers e kubernets 
 
+<h1>
+  <img src= "./img/pick.jpeg"/>
+</h1>
+
 clonar aplicação 
 #git clone https://github.com/badtuxx/giropops-senhas.git
 
@@ -26,6 +30,9 @@ CMD ["flask", "run", "--host=0.0.0.0"]
 rodar aplicação e setar ip local para rodar REDIS junto 
 docker run -d --name giropops-senhas -p 5000:5000 --env REDIS_HOST=192.168.10.64 giropops-senha:1.0
 
+<h1>
+  <img src= "./img/1.png"/>
+</h1>
 
 rodar Redis 
 docker run -d --name redis -p 6379:6379 redis
@@ -34,6 +41,9 @@ alterando a imagem
 FROM python:3.11-slim
 docker build -t giropops-senha:2.0 .
 
+<h1>
+  <img src= "./img/2.png"/>
+</h1>
 
 alterando a imagem 
 FROM python:3.11.4-alpine3.18
@@ -86,6 +96,10 @@ ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0", "--debug"]
 docker build -t giropops-senha:5.0 .
 
 docker run -d --name giropops-senhas -p 5000:5000 --env REDIS_HOST=172.30.1.28 giropops-senha:5.0
+
+<h1>
+  <img src= "./img/3.png"/>
+</h1>
 
 -----------------------------------------------------------------
 #Instalar TRIVY 

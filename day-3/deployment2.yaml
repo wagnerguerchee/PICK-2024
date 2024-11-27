@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-deployment
+  name: nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-deployment
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: nginx-deployment
+    spec:
+      containers:
+      - image: nginx:1.16.0
+        name: nginx
+        resources:
+          limits:
+            cpu: "0.3"
+            memory: 128Mi
+          requests:
+            cpu: "0.1"
+            memory: 64Mi
+
+            Requests:
+64Mi de Memória;
+0.1 de CPU;
+Limits:
+128 Mi de Memória;
+0.3 de CPU;
+Use a estratégia de atualização do Deployment que atualiza todos os pods de uma vez;
+A versão do Nginx deve ser a 1.16.0.

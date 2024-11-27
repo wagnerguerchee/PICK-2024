@@ -1,0 +1,170 @@
+Minikube
+Requisitos básicos
+É importante frisar que o Minikube deve ser instalado localmente, e não em um cloud provider. Por isso, as especificações de hardware a seguir são referentes à máquina local.
+
+Processamento: 1 core;
+Memória: 2 GB;
+HD: 20 GB.
+
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
+chmod +x ./minikube
+
+sudo mv ./minikube /usr/local/bin/minikube
+
+Você pode então listar os nós que fazem parte do seu cluster k8s com o seguinte comando:
+
+kubectl get nodes
+  A saída será similar ao conteúdo a seguir:
+
+kubectl get nodes
+
+  Para criar um cluster com mais de um nó, você pode utilizar o comando abaixo, apenas modificando os valores para o desejado:
+
+minikube start --nodes 2 -p multinode-cluster
+
+  Inicialmente, a intenção do Minikube é executar o k8s em apenas um nó, porém a partir da versão 1.10.1 e possível usar a função de multi-node.
+
+Caso os comandos anteriores tenham sido executados sem erro, a instalação do Minikube terá sido realizada com sucesso.
+
+Ver detalhes sobre o cluster
+minikube status
+ 
+
+Descobrindo o endereço do Minikube
+Como dito anteriormente, o Minikube irá criar uma máquina virtual, assim como o ambiente para a execução do k8s localmente. Ele também irá configurar o kubectl para comunicar-se com o Minikube. Para saber qual é o endereço IP dessa máquina virtual, pode-se executar:
+
+minikube ip
+  O endereço apresentado é que deve ser utilizado para comunicação com o k8s.
+
+Acessando a máquina do Minikube via SSH
+Para acessar a máquina virtual criada pelo Minikube, pode-se executar:
+
+minikube ssh
+ 
+
+Dashboard do Minikube
+O Minikube vem com um dashboard web interessante para que o usuário iniciante observe como funcionam os workloads sobre o k8s. Para habilitá-lo, o usuário pode digitar:
+
+minikube dashboard
+ 
+
+Logs do Minikube
+Os logs do Minikube podem ser acessados através do seguinte comando.
+
+minikube logs
+ 
+
+Remover o cluster
+minikube delete
+  Caso queira remover o cluster e todos os arquivos referente a ele, utilize o parametro --purge, conforme abaixo:
+
+minikube delete --purge
+
+
+Primeiros passos no k8s
+ 
+
+Verificando os namespaces e pods
+O k8s organiza tudo dentro de namespaces. Por meio deles, podem ser realizadas limitações de segurança e de recursos dentro do cluster, tais como pods, replication controllers e diversos outros. Para visualizar os namespaces disponíveis no cluster, digite:
+
+kubectl get namespaces
+  Vamos listar os pods do namespace kube-system utilizando o comando a seguir.
+
+kubectl get pod -n kube-system
+  Será que há algum pod escondido em algum namespace? É possível listar todos os pods de todos os namespaces com o comando a seguir.
+
+kubectl get pods -A
+  Há a possibilidade ainda, de utilizar o comando com a opção -o wide, que disponibiliza maiores informações sobre o recurso, inclusive em qual nó o pod está sendo executado. Exemplo:
+
+kubectl get pods -A -o wide
+ 
+
+Executando nosso primeiro pod no k8s
+Iremos iniciar o nosso primeiro pod no k8s. Para isso, executaremos o comando a seguir.
+
+kubectl run nginx --image nginx
+
+pod/nginx created
+  Listando os pods com kubectl get pods, obteremos a seguinte saída.
+
+NAME    READY   STATUS    RESTARTS   AGE
+nginx   1/1     Running   0          66s
+  Vamos agora remover o nosso pod com o seguinte comando.
+
+kubectl delete pod nginx
+  A saída deve ser algo como:
+
+pod "nginx" deleted
+ 
+
+Executando nosso primeiro pod no k8s
+Uma outra forma de criar um pod ou qualquer outro objeto no Kubernetes é através da utilizaçâo de uma arquivo manifesto, que é uma arquivo em formato YAML onde você passa todas as definições do seu objeto. Mas pra frente vamos falar muito mais sobre como construir arquivos manifesto, mas agora eu quero que você conheça a opção --dry-run do kubectl, pos com ele podemos simular a criação de um resource e ainda ter um manifesto criado automaticamente.
+
+Exemplos:
+
+Para a criação do template de um pod:
+
+kubectl run meu-nginx --image nginx --dry-run=client -o yaml > pod-template.yaml
+  Aqui estamos utilizando ainda o parametro '-o', utilizando para modificar a saída para o formato YAML.
+
+Para a criação do template de um deployment:
+
+Com o arquivo gerado em mãos, agora você consegue criar um pod utilizando o manifesto que criamos da seguinte forma:
+
+kubectl apply -f pod-template.yaml
+Não se preocupe por enquanto com o parametro 'apply', nós ainda vamos falar com mais detalhes sobre ele, nesse momento o importante é você saber que ele é utilizado para criar novos resources através de arquivos manifestos.
+
+ 
+
+Expondo o pod e criando um Service
+Dispositivos fora do cluster, por padrão, não conseguem acessar os pods criados, como é comum em outros sistemas de contêineres. Para expor um pod, execute o comando a seguir.
+
+kubectl expose pod nginx
+Será apresentada a seguinte mensagem de erro:
+
+error: couldn't find port via --port flag or introspection
+See 'kubectl expose -h' for help and examples
+O erro ocorre devido ao fato do k8s não saber qual é a porta de destino do contêiner que deve ser exposta (no caso, a 80/TCP). Para configurá-la, vamos primeiramente remover o nosso pod antigo:
+
+kubectl delete -f pod-template.yaml
+Agora vamos executar novamente o comando para a criação do pod utilizando o parametro 'dry-run', porém agora vamos adicionar o parametro '--port' para dizer qual a porta que o container está escutando, lembrando que estamos utilizando o nginx nesse exemplo, um webserver que escuta por padrão na porta 80.
+
+kubectl run meu-nginx --image nginx --dry-run=client -o yaml > pod-template.yaml
+kubectl create -f pod-template.yaml
+Liste os pods.
+
+kubectl get pods
+
+NAME    READY   STATUS    RESTARTS   AGE
+meu-nginx   1/1     Running   0          32s
+O comando a seguir cria um objeto do k8s chamado de Service, que é utilizado justamente para expor pods para acesso externo.
+
+kubectl expose pod meu-nginx
+Podemos listar todos os services com o comando a seguir.
+
+kubectl get services
+
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1       <none>        443/TCP   8d
+nginx        ClusterIP   10.105.41.192   <none>        80/TCP    2m30s
+Como é possível observar, há dois services no nosso cluster: o primeiro é para uso do próprio k8s, enquanto o segundo foi o quê acabamos de criar.
+
+ 
+
+Limpando tudo e indo para casa
+Para mostrar todos os recursos recém criados, pode-se utilizar uma das seguintes opções a seguir.
+
+kubectl get all
+
+kubectl get pod,service
+
+kubectl get pod,svc
+Note que o k8s nos disponibiliza algumas abreviações de seus recursos. Com o tempo você irá se familiar com elas. Para apagar os recursos criados, você pode executar os seguintes comandos.
+
+kubectl delete -f pod-template.yaml
+kubectl delete service nginx
+Liste novamente os recursos para ver se os mesmos ainda estão presentes.
+
+
+minikube version

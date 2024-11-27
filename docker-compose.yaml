@@ -1,0 +1,40 @@
+version: '3.3'
+services:
+  app_giropops-senhas-1:
+    image: linuxtips/giropops-senhas:1.0
+    container_name: app-giropops-senhas-1
+    ports: 
+      - "5000:5000"
+    networks:
+      - giropops
+      - strigus
+    environment:
+      REDIS_HOST: redis
+    volumes:
+      - type: volume
+        source: strigus
+        target: /strigus
+    depends_on:
+      - redis
+    labels:
+      com.docker.description: "Giropops"
+  
+  redis:
+    image: redis:latest
+    container_name: app-redis-1
+    command: redis-server --appendonly yes
+    networks:
+      - giropops
+      - strigus
+    volumes:
+      - strigus:/strigus 
+
+networks:
+  giropops:
+    driver: bridge
+  strigus:
+    driver: bridge
+
+volumes:
+  strigus:
+    driver: local

@@ -1,0 +1,13 @@
+kubectl  rollout  undo deployment -n default (nome do deploy )
+
+kubectl  rollout  undo deployment -n default (nome do deploy ) --revision 6  para revisao especifica 
+
+kubectl  rollout  pause deployment -n default (nome do deploy ) 
+
+kubectl  rollout  resume  deployment -n default (nome do deploy ) 
+
+kubectl  rollout  restart deployment -n default (nome do deploy ) 
+
+
+
+kubectl rollout history

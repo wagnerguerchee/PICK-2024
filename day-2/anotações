@@ -1,0 +1,27 @@
+Agora vamos criar o Pod.
+
+kubectl create -f pod-emptydir.yaml
+
+Agora vamos verificar se o Pod foi criado.
+
+kubectl get pods
+
+Você pode ver a saída do comando kubectl describe pod giropops para ver o volume que foi criado.
+
+kubectl describe pod giropops
+
+Agora vamos para dentro do container.
+
+kubectl exec -it ubuntu -- bash
+
+Agora vamos criar um arquivo dentro do diretório /giropops.
+
+touch /giropops/FUNCIONAAAAAA
+
+Pronto, o nosso arquivo foi criado dentro do diretório /giropops, que é um diretório dentro do volume do tipo EmptyDir.
+
+Se você digitar mount, vai ver que o diretório /giropops está montado certinho dentro de nosso container.
+
+Pronto, agora você já sabe criar um Pod com um volume do tipo EmptyDir. :)
+
+Lembrando mais uma vez que ainda vamos ver muito, mas muito mais sobre volumes, então não se preocupe com isso agora. 

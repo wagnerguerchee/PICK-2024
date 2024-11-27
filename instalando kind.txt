@@ -1,0 +1,35 @@
+Kind
+O Kind (Kubernetes in Docker) é outra alternativa para executar o Kubernetes num ambiente local para testes e aprendizado, mas não é recomendado para uso em produção.
+
+Instalação no GNU/Linux
+Para fazer a instalação no GNU/Linux, execute os seguintes comandos.
+
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.14.0/kind-linux-amd64
+
+chmod +x ./kind
+
+sudo mv ./kind /usr/local/bin/kind
+
+Após realizar a instalação do Kind, vamos iniciar o nosso cluster.
+
+kind create cluster
+
+---------------------------------------------
+  Crie um arquivo de configuração para definir quantos e o tipo de nós no cluster que você deseja. No exemplo a seguir, será criado o arquivo de configuração kind-3nodes.yaml para especificar um cluster com 1 nó control-plane (que executará o control plane) e 2 workers.
+
+cat << EOF > $HOME/kind-3nodes.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+  - role: worker
+  - role: worker
+EOF
+
+  Agora vamos criar um cluster chamado kind-multinodes utilizando as especificações definidas no arquivo kind-3nodes.yaml.
+
+kind create cluster --name kind-multinodes --config $HOME/kind-3nodes.yaml
+
+kubectl get nodes
+kind delete clusters $(kind get clusters)
+

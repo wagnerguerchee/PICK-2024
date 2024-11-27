@@ -10,8 +10,9 @@ clonar aplicação
 
 #git clone https://github.com/badtuxx/giropops-senhas.git
 ```
-entrar no diretorio 
-cd giropops-senhas/
+ou clonar essa aplicaçãoa aqui 
+entrar no diretorio /giropops-senhas ou 
+cd app/
 
 Criar Dockerfile 
 vim Dockerfile

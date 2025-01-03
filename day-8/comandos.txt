@@ -1,0 +1,36 @@
+kubectl create -f giropops-secret.yaml
+#para criar secrets 
+
+#para ver ver os dados armazenados no Secret
+
+kubectl get secret giropops-secret -o yaml
+ou  
+kubectl describe secret giropops-secret
+
+ou podemos criar por linha de comando 
+
+kubectl create secret generic giropops-secret --from-literal=username=<SEGREDO> --from-literal=password=giropops
+
+####Quando você executa docker login e tem a sua autenticação bem sucedida, o Docker cria um arquivo chamado 
+config.json no diretório ~/.docker/ do seu usuário, e esse arquivo contém o nome de usuário e a senha da sua 
+conta no Docker Hub, e é esse arquivo que você precisa usar para criar o seu Secret.
+
+comando para ver 
+base64 ~/.docker/config.json
+
+kubectl apply -f dockerhub-secret.yaml
+
+kubectl get secrets
+
+#inserindo dados do secret no pod
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: meu-pod
+spec:
+  containers:
+  - name: meu-container
+    image: minha-imagem-privada
+  imagePullSecrets: # campo que define o Secret que armazena as credenciais do Docker Hub
+  - name: docker-hub-secret # nome do Secret

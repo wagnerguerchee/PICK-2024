@@ -1,0 +1,18 @@
+git clone https://github.com/prometheus-operator/kube-prometheus
+
+cd kube-prometheus
+
+kubectl create -f manifests/setup
+
+#depois de instalar os de cima , rodar o seguinte comando 
+
+kubectl apply -f manifests/
+
+#para verificar aqui no namespace tudo que foi instalado 
+kubectl get pods -n monitoring
+
+#acessando sem ingress 
+kubectl port-forward -n monitoring svc/grafana 33000:3000
+URL: http://localhost:33000
+
+

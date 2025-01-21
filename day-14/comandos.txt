@@ -1,0 +1,17 @@
+Instalando o metrics Server 
+
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+descrição apos criar o hpa e deployment 
+
+Neste exemplo, criamos um HPA que monitora a utilização da CPU do nosso nginx-deployment. O HPA se esforçará para manter a utilização da CPU em torno de 50%, ajustando o número de réplicas entre 3 e 10 conforme necessário.
+
+Para aplicar esta configuração ao seu cluster Kubernetes, salve o conteúdo acima em um arquivo chamado
+
+nginx-deployment-hpa.yaml e execute o seguinte comando:
+kubectl apply -f hpa-deployment.yaml
+
+instalando o locust para afzer o test de stress
+
+criar um ingress para acessar locust 
+

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: locust-giropops
+  name: locust-giropops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust-giropops
+  template:
+    metadata:
+      labels:
+        app: locust-giropops
+    spec:
+      containers:
+      - image: linuxtips/locust-giropops:1.0
+        name: locust-giropops
+        ports:
+        - containerPort: 8089
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: locust-giropops
+spec:
+  selector:
+    app: locust-giropops
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8089
+  type: ClusterIP
